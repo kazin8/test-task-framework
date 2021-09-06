@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use App\Service\User\Validator\EmailDomainBlacklistValidator;
+use App\Service\User\Validator\NameBlacklistValidator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -173,11 +175,10 @@ class User implements EntityInterface
             'fields' => 'name',
             'message' => 'The name {{ value }} already in use'
         ]));
-//        $metadata->addConstraint(new Assert\Callback([
-//            NameBlackListService::class,
-//            'validate',
-//        ]));
-        // Custom black list validator
+        $metadata->addConstraint(new Assert\Callback([
+            NameBlacklistValidator::class,
+            'validate',
+        ]));
 
 
         $metadata->addPropertyConstraint('email', new Assert\NotBlank());
@@ -192,10 +193,10 @@ class User implements EntityInterface
             'fields' => 'email',
             'message' => 'The email {{ value }} already in use'
         ]));
-//        $metadata->addConstraint(new Assert\Callback([
-//            EmailDomainBlackListService::class,
-//            'validate',
-//        ]));
+        $metadata->addConstraint(new Assert\Callback([
+            EmailDomainBlacklistValidator::class,
+            'validate',
+        ]));
 
     }
 

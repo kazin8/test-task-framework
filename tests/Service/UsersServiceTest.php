@@ -4,7 +4,7 @@ namespace App\Tests\Service;
 
 use App\Dto\User\UserDto;
 use App\Exception\EntityNotFoundException;
-use App\Service\UserServiceInterface;
+use App\Service\User\UserServiceInterface;
 
 class UsersServiceTest extends AbstractServiceTest
 {

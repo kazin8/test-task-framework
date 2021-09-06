@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\User;
 
 use App\Dto\Assembler\UserAssembler;
 use App\Dto\PaginatedCollectionDto;
