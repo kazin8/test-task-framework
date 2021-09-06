@@ -1,0 +1,47 @@
+version: '2.1'
+services:
+
+  symfony_app:
+    container_name: symfony_app
+    restart: "no"
+    image: thecodingmachine/php:7.4-v4-fpm
+    volumes:
+      - ./:/var/www/html
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ~/.ssh:/home/docker/.ssh:ro
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+#      PHP_EXTENSION_XDEBUG: 1
+#      PHP_INI_XDEBUG__REMOTE_HOST: host.docker.internal
+#      PHP_INI_XDEBUG__REMOTE_PORT: 9001
+#      PHP_INI_XDEBUG__REMOTE_AUTOSTART: 0
+#      PHP_INI_XDEBUG__REMOTE_CONNECT_BACK: 0
+#      PHP_INI_XDEBUG__REMOTE_ENABLE: 1
+#      PHP_INI_XDEBUG__CLI_COLOR: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_MYSQLI: 0
+      PHP_IDE_CONFIG: "serverName=docker"
+      XDEBUG_CONFIG: "idekey=PHPSTORM max_nesting_level=1500"
+    links:
+#      - symfony_env_redis
+      - symfony_env_db
+
+#  symfony_env_redis:
+#    image: redis
+#    container_name: symfony_env_redis
+#    restart: "no"
+#    command: redis-server --requirepass 12345678
+#    ports:
+#      - 7001:6379
+
+  symfony_env_db:
+    image: postgres:latest
+    container_name: symfony_env_db
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "6543:5432"
+    volumes:
+      - ./docker/postgres/runtime/data:/var/lib/postgresql/data
+      - ./docker/postgres/init_scripts:/docker-entrypoint-initdb.d/
+      - ./docker/logs/postgres:/var/log/postgresql/
